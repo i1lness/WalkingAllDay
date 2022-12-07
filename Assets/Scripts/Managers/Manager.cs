@@ -5,9 +5,9 @@ public class Manager : MonoBehaviour
     static Manager s_instance;
     static Manager Instance { get { Init(); return s_instance; } }
 
-    // InputManager _inputManager = new InputManager();
+    InputManager _inputManager = new InputManager();
 
-    // public static InputManager Input { get { return Instance._inputManager; } }
+    public static InputManager Input { get { return Instance._inputManager; } }
 
     void Start()
     {
@@ -16,7 +16,7 @@ public class Manager : MonoBehaviour
 
     void Update()
     {
-
+        Input.OnUpdate();
     }
 
     static void Init()
