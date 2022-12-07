@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
 
     [SerializeField]
-    float _speed = 6f; // 이동속도
+    float _speed = 8f; // 오브젝트 이동속도
 
 
     void Start()
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
         animator = gameObject.GetComponent<Animator>();
 
-        Manager.Input.moveInputAction += UpdateMovement; // MoveInput관련 대리자에 이동을 구현하는 함수 추가
+        Manager.Input.moveInputAction += UpdateMovement;
     }
 
     void Update()
@@ -35,26 +35,26 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    Vector3 _lastPosition = Vector3.zero; // 전 프레임에서의 좌표
+    Vector3 _lastPosition = Vector3.zero;
     void CheckMovement() // 움직이는지 확인, 움직이지 않으면 애니메이션 "Running" 파라미터 수정
     {
-        Vector3 moveDistance = _lastPosition - transform.position; // 전 프레임과 현재 프레임간의 거리차이 계산
-        if (moveDistance.magnitude < 0.0001f) // 움직임이 확인되지 않는다면 "Running" 파라미터 비활성화
+        Vector3 moveDistance = _lastPosition - transform.position;
+        if (moveDistance.magnitude < 0.0001f) // 전 프레임과 위치가 같을 경우
         {
             animator.SetBool("Running", false);
         }
     }
 
-    void UpdateMovement(float xMove, float zMove) // MoveInput 받으면 화면으로 이동을 구현
+    void UpdateMovement(float xMove, float zMove) // MoveInput값 받으면 화면으로 이동을 구현
     {
         Vector3 getVel = new Vector3(xMove, 0, zMove) * _speed;
 
-        if ((xMove == 0) || (zMove == 0))
+        if ((xMove != 0) && (zMove != 0)) // 대각선 이동 시 빨라지는 현상 수정
         {
-            getVel *= 1.414f;
+            getVel *= 0.7f;
         }
         rb.AddForce(getVel);
 
-        animator.SetBool("Running", true); // 애니메이션 파라미터을 이동 중으로 수정
+        animator.SetBool("Running", true);
     }
 }

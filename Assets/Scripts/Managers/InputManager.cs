@@ -6,20 +6,21 @@ using UnityEngine.Playables;
 
 public class InputManager
 {
-    public Action<float, float> moveInputAction = null; // MoveInput 관련 함수 대리자
+    public Action<float, float> moveInputAction = null; // Input값을 넘겨주어 계산에 사용하게 함
 
-    public Action mouseInputAction = null; // MouseInput 관련 함수 대리자
+    public Action mouseInputAction = null;
 
-    public void OnUpdate() // InputManager가 매 프레임마다 확인해야 할 것을 모아놓은 함수
+    /* Input 확인하는 함수 */
+    public void CheckInput()
     {
-        if (Input.anyKey) // 입력 받으면 실행
+        if (Input.anyKey)
         {
-            float xMove = Input.GetAxis("Horizontal"); // 오른쪽, 왼쪽의 MoveInput 확인 및 저장
-            float zMove = Input.GetAxis("Vertical"); // 위, 아래의 MoveInput 확인 및 저장
+            float xMove = Input.GetAxis("Horizontal");
+            float zMove = Input.GetAxis("Vertical");
 
-            if ((xMove != 0) || (zMove != 0)) // 둘 중 하나라도 입력이 확인 된다면 실행
+            if ((xMove != 0) || (zMove != 0)) // MoveInput이 존재하는 경우
             {
-                moveInputAction.Invoke(xMove, zMove); // 이동관련 함수 입력값과 함께 호출
+                moveInputAction.Invoke(xMove, zMove);
             }
         }
     }

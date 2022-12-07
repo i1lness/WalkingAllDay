@@ -2,41 +2,42 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
-    static Manager s_instance; // static으로 선언하여 사용할 Manager 컴포넌트를 하나만 존재하게 한다
-    InputManager _inputManager = new InputManager(); // InputManager를 Manager 안에 선언 및 정의하여 하나만 존재하게(접근가능하게)한다
+    static Manager s_instance;
+    InputManager _inputManager = new InputManager();
 
-    static Manager Instance { get { Init(); return s_instance; } } // Manager Property
+    static Manager Instance { get { Init(); return s_instance; } } // 만약 s_instance 존재X -> s_instance 정의
 
-    public static InputManager Input { get { return Instance._inputManager; } } // InputManager Property
+    public static InputManager Input { get { return Instance._inputManager; } }
 
     void Start()
     {
-        Init();
+        Init(); // Manager 초기 설정
     }
 
     void Update()
     {
-        Input.OnUpdate(); // InputManager가 매 프레임마다 확인해야 할 것을 모아놓은 함수
+        Input.CheckInput(); // Input 확인 함수
     }
 
-    static void Init() // @Manager오브젝트 초기 설정 함수
+    /* Manager 초기생성 및 설정 함수 */
+    static void Init()
     {
         if (s_instance == null)
         {
-            GameObject go = GameObject.Find("@Manager"); // @Manager를 찾아본다
+            GameObject go = GameObject.Find("@Manager");
 
-            if (go == null) // 만약 존재하지 않으면 @Manager오브젝트를 하나 생성
+            if (go == null)
             {
                 go = new GameObject { name = "@Manager" };
             }
-            if (go.GetComponent<Manager>() == null) // @Manager에 Manager스크립트가 없으면 스크립트를 추가
+            if (go.GetComponent<Manager>() == null)
             {
                 go.AddComponent<Manager>();
             }
 
-            DontDestroyOnLoad(go); // @Manager오브젝트를 DontDestroyOnLoad에 올려놓아 Destory를 막는다
+            DontDestroyOnLoad(go);
 
-            s_instance = go.GetComponent<Manager>(); // static으로 오브젝트 저장 (정확히는 해당 오브젝트의 Manager 컴포넌트를 저장한다)
+            s_instance = go.GetComponent<Manager>(); // 나중에 사용하기 위해 코드상에 오브젝트 저장
         }
     }
 }
